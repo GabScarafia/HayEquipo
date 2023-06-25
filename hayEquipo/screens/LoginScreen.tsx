@@ -1,28 +1,49 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { styles } from './LoginScreen.style';
+import supabase from '../lib/supabase';
+import SupabaseService from '../lib/supabase';
+import User from "../classes/user"
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  let responseData: any;
+  const [responseData, setResponse] = useState<User | null>(null);
+  const supabaseService = new SupabaseService();
 
   async function handleLogin(){
-   // await fetchData()
-    // Aquí puedes realizar la lógica de autenticación, como enviar una solicitud al servidor o verificar los datos localmente.
-    if (username === responseData.nombre && password === responseData.password) {
+    setResponse(await supabaseService.getUserByUsername(username))
+    if (username === responseData?.username && password === responseData?.password) {
       Alert.alert('Inicio de sesión exitoso');
     } else {
       Alert.alert('Error de inicio de sesión');
     }
   };
 
-  // const fetchData = async () => {
-    
-  //     responseData = await supabase
-  //     .from('Persona')
-  //     .select('1')
-  // };
+  // async function getUserById(username: string) {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('User')
+  //       .select('*')
+  //       .eq('username', username)
+  //       .single();
+  //     console.log(data)
+  //     if (error) {
+  //       throw new Error(error.message);
+  //     }
+
+  //     if (data) {
+  //       const { id, username, email, password } = data;
+
+  //       return new User(id, username, email, password);
+  //     }
+
+  //     return null;
+  //   } catch {
+  //     return null;
+  //   }
+  // }
+
 
   return (
     <>
