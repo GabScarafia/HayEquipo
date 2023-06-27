@@ -42,5 +42,8 @@ export const styles = StyleSheet.create({
       paddingVertical: 5,
       // Estilos adicionales para el botón "Registrarse"
     },
-    
+    errorText: {
+      color: 'red',
+      marginBottom: 10,
+    },
 });

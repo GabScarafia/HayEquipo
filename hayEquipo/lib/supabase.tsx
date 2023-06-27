@@ -1,6 +1,7 @@
 import 'react-native-url-polyfill/auto'
 import { createClient } from '@supabase/supabase-js';
 import User from '../classes/user';
+import Persona from '../classes/persona';
 
 class SupabaseService {
     supabaseUrl: string;
@@ -28,6 +29,29 @@ class SupabaseService {
         if (data) {
           const { id, username, email, password } = data;
           return new User(id, username, email, password);
+        }
+  
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    async getPersonByUserId(userId: number) {
+      try {
+        const { data, error } = await this.supabase
+          .from('Persona')
+          .select('*')
+          .eq('userId', userId)
+          .single();
+  
+        if (error) {
+          throw new Error(error.message);
+        }
+  
+        if (data) { 
+          const { id, username, apellido, dni, genero } = data;
+          return new Persona(id, username, apellido, dni, genero, null);
         }
   
         return null;
