@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 
-import { IconButton } from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from "./screens/HomeScreen";
+import { IconButton } from 'react-native-paper';
 
 export type RootStackParams = {
   Register : any;
@@ -35,7 +35,7 @@ const App = () => {
               <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({ 
                                                                         headerBackVisible: false,
                                                                         title: "Hay Equipo",
-                                                                        headerRight: () => (<IconButton icon="close-circle-outline" onPress={()=>CloseSesion(navigation)} />)})}/>
+                                                                        headerRight: () => (<IconButton icon="close" onPress={()=>CloseSesion(navigation)} />)})}/>
 
       </Stack.Navigator>
     </NavigationContainer>

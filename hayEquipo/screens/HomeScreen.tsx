@@ -8,6 +8,7 @@ import { RootStackParams } from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
     const [loged, setLoged]  = useState(false);
 
     const ifLoged = async() : Promise<Boolean> => {
@@ -23,15 +24,12 @@ const HomeScreen = () => {
         }
         return(loged)
     }
-
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+    
     return (
-        <View>
-            <View>
-                <Text>Home</Text>
-                <Button title='opciones'/>
-                <Button title='perfil'/>
-            </View>
+        
+        <View style={styles.view} >
+            <Button title='opciones'/>
+            <Button title='perfil'/>
         </View>
     )
 }
