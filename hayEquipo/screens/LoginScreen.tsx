@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Alert, Pressable, Text, TouchableOpacity } from 'react-native';
 import { styles } from './LoginScreen.style';
-import supabase from '../lib/supabase';
 import SupabaseService from '../lib/supabase';
-import User from "../classes/user"
 import Persona from "../classes/persona"
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../App';
@@ -14,10 +12,30 @@ const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [responseData, setResponse] = useState<User | null>(null);
-  // const [personData, setPerson] = useState<Persona | null>(null);
   const [error, setError] = useState('');
   const supabaseService = new SupabaseService();
+
+  const [loged, setLoged]  = useState(false);
+
+   useEffect(() => {
+     ifLoged();
+    }, []);
+
+
+  async function ifLoged() {
+      console.log(loged)
+      const value = await AsyncStorage.getItem('user');
+      if(value != null)
+      {
+          setLoged(true)
+          navigation.navigate("Home");
+      }
+      else{
+          setLoged(false)
+         
+      }
+      return(loged)
+  }
 
   async function handleLogin(){
     setError('');
@@ -45,7 +63,7 @@ const LoginScreen = () => {
   };
   
   const handleNavigate = () => {
-    navigation.navigate("Register");
+    navigation.navigate('Register');
   };
 
   return (
@@ -64,7 +82,7 @@ const LoginScreen = () => {
         <Button title="Iniciar sesión" onPress={handleLogin} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <View style={styles.registerButtonContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={async() => await handleNavigate} >
+          <TouchableOpacity style={styles.registerButton} onPress={handleNavigate} >
             <Text>Registrarse</Text>
           </TouchableOpacity >
         </View>
