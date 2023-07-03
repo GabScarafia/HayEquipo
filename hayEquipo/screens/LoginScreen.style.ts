@@ -15,32 +15,36 @@ export const styles = StyleSheet.create({
     },
 
     view:{
-      height: "90%",
-      width: '80%',
-      gap:2,
-      alignSelf: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      paddingHorizontal: 16,
     },
-
+    inputContainer: {
+      marginBottom: 16,
+    },
     input: {
-        height:64,
-        width: 128,
+      borderWidth: 1,
+      borderColor: '#000',
+      borderRadius: 8,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      fontSize: 16,
     },
 
     registerButtonContainer: {
-      position: 'absolute',
-      bottom: 20,
-      width: '100%',
-      paddingHorizontal: 20,
+      height:40,
+      paddingHorizontal: 16,
     },
     registerButton: {
-      backgroundColor: 'transparent',
-      alignItems:'center',
-      borderWidth: 1,
-      borderColor: 'black',
-      borderRadius: 5,
+      backgroundColor: 'rgba(245, 39, 39, 1)',
+      alignItems:'center', justifyContent:"center",
+      height:36,
+       borderRadius: 1,
       paddingHorizontal: 10,
       paddingVertical: 5,
-      // Estilos adicionales para el botón "Registrarse"
+    },
+    registerButtonText: {
+      color: "white",
     },
     errorText: {
       color: 'red',

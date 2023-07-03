@@ -14,7 +14,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const supabaseService = new SupabaseService();
-
   const [loged, setLoged]  = useState(false);
 
    useEffect(() => {
@@ -69,21 +68,30 @@ const LoginScreen = () => {
   return (
     <>
       <View style={styles.view}>
-        <TextInput 
-          style={styles.input}
-          placeholder="Usuario"
-          value={username}
-          onChangeText={setUsername}/>
-        <TextInput
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry/>
-        <Button title="Iniciar sesión" onPress={handleLogin} />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Usuario"
+            value={username}
+            onChangeText={setUsername}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Button title="Iniciar sesión" onPress={handleLogin} />
+        </View>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
-        <View style={styles.registerButtonContainer}>
+        <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.registerButton} onPress={handleNavigate} >
-            <Text>Registrarse</Text>
+            <Text style={styles.registerButtonText}>CREAR CUENTA</Text>
           </TouchableOpacity >
         </View>
       </View>

@@ -31,11 +31,13 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
               <Stack.Screen name="Login" component={LoginScreen}/>             
-              <Stack.Screen name='Register' component={RegisterScreen} />
+              <Stack.Screen name='Register' component={RegisterScreen}  options={() => ({title: "Crear cuenta",})} />
               <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({ 
                                                                         headerBackVisible: false,
                                                                         title: "Hay Equipo",
-                                                                        headerRight: () => (<IconButton icon="close" onPress={()=>CloseSesion(navigation)} />)})}/>
+                                                                        headerRight: () => (
+                                                                                            <IconButton icon="logout" onPress={()=>CloseSesion(navigation)} />
+                                                                        )})}/>
 
       </Stack.Navigator>
     </NavigationContainer>
