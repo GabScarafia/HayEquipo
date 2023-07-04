@@ -17,5 +17,5 @@ class Persona {
       this.User = User;
     }
   }
-
+  
 export default Persona

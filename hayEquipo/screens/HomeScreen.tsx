@@ -12,7 +12,7 @@ const HomeScreen = () => {
     const [loged, setLoged]  = useState(false);
 
     const ifLoged = async() : Promise<Boolean> => {
-        console.log(loged)
+        //console.log(loged)
         const value = await AsyncStorage.getItem('user');
         if(value != null)
         {

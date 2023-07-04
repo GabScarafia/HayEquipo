@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Alert, Pressable, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, Alert, Text, TouchableOpacity, Image } from 'react-native';
 import { styles } from './LoginScreen.style';
 import SupabaseService from '../lib/supabase';
 import Persona from "../classes/persona"
@@ -22,7 +22,7 @@ const LoginScreen = () => {
 
 
   async function ifLoged() {
-      console.log(loged)
+      //console.log(loged)
       const value = await AsyncStorage.getItem('user');
       if(value != null)
       {
@@ -67,7 +67,11 @@ const LoginScreen = () => {
 
   return (
     <>
+    
       <View style={styles.view}>
+        <View style={styles.imageContainer}>
+          <Image source={require('../assets/hayEquipo.png')} style={styles.image} />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}

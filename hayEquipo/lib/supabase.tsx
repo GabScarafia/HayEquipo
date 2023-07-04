@@ -59,6 +59,27 @@ class SupabaseService {
         return null;
       }
     }
+
+    async newRegister(userPerson : object){
+      try {
+        const { dataU, errorU } = await this.supabase
+            .from('User')
+            .insert([
+              { username: "" , email: 'otherValue', password: ""},
+            ])
+            .select()
+          if(dataU){
+              const { dataP, errorP } = await this.supabase
+              .from('Persona')
+              .insert([
+                { nombre: 'someValue', apellido: 'otherValue', dni: "", genero: "", userId: "" },
+              ])
+              .select()
+          }  
+      } catch {
+        return 404 //Cuando no encuentro la db
+      }
+    }
   }
   
 export default SupabaseService

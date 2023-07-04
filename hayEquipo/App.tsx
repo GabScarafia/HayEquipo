@@ -30,8 +30,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-              <Stack.Screen name="Login" component={LoginScreen}/>             
-              <Stack.Screen name='Register' component={RegisterScreen}  options={() => ({title: "Crear cuenta",})} />
+              <Stack.Screen name="Login" component={LoginScreen} options={() => ({title: "Iniciar Sesion",})} />             
+              <Stack.Screen name='Register' component={RegisterScreen} options={() => ({title: "Crear cuenta",})} />
               <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({ 
                                                                         headerBackVisible: false,
                                                                         title: "Hay Equipo",

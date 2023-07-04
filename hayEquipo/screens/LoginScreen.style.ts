@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 16,
     },
 
     textTitle:{
@@ -29,6 +28,7 @@ export const styles = StyleSheet.create({
       paddingVertical: 8,
       paddingHorizontal: 16,
       fontSize: 16,
+      backgroundColor: "white",
     },
 
     registerButtonContainer: {
@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
       backgroundColor: 'rgba(245, 39, 39, 1)',
       alignItems:'center', justifyContent:"center",
       height:36,
-       borderRadius: 1,
+      borderRadius: 1,
       paddingHorizontal: 10,
       paddingVertical: 5,
     },
@@ -49,5 +49,16 @@ export const styles = StyleSheet.create({
     errorText: {
       color: 'red',
       marginBottom: 10,
+    },
+    image:{
+      width:125,
+      height:125,
+      resizeMode:"contain"
+    },
+    imageContainer: {
+      flex: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom:10
     },
 });

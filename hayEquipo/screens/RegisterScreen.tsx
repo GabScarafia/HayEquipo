@@ -18,32 +18,45 @@ const RegistrationScreen = () => {
     nombre: '',
     apellido: '',
     dni: '',
-    genero: '',
   });
 
 
   const handleRegister = () => {
-
-    if (!username) {
+    setErrors({
+      username: '',
+      email: '',
+      password: '',
+      nombre: '',
+      apellido: '',
+      dni: '',
+    });
+    var cError = false
+    if (!username || username === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, username: 'Este Campo no puede estar Vacio' }));
     }
-    if (!email) {
+    if (!email || email === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, email: 'Este Campo no puede estar Vacio' }));
     }
-    if (!password) {
+    if (!password || password === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, password: 'Este Campo no puede estar Vacio' }));
     }
-    if (!nombre) {
+    if (!nombre || apellido === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, nombre: 'Este Campo no puede estar Vacio' }));
     }
-    if (!apellido) {
+    if (!apellido || apellido === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, apellido: 'Este Campo no puede estar Vacio' }));
     }
-    if (!dni) {
+    if (!dni || dni === "") {
+      cError = true
       setErrors((prevErrors) => ({ ...prevErrors, dni: 'Este Campo no puede estar Vacio' }));
     }
-    if (Object.values(errors).some((error) => error !== null && error !== '')) {
-      return;
+    if ( cError === true) {
+       return;
     }
     setIsLoading(true);
     const user = {
@@ -64,7 +77,7 @@ const RegistrationScreen = () => {
           <View style={styles.inputContainer}>
             <TextInput 
               style={styles.input}
-              placeholder="Username"
+              placeholder="Usuario"
               value={username}
               onChangeText={setUsername}
             />
