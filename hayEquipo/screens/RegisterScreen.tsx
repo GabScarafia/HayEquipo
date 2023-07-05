@@ -1,8 +1,17 @@
 import React, { useState} from 'react';
-import { View, TextInput, Button, Text, ScrollView } from 'react-native';
+import { View, TextInput, Button, Text, ScrollView, Alert } from 'react-native';
 import { styles } from './RegisterScreen.style';
+import {NewUser, User} from '../classes/user';
+import Persona from '../classes/persona';
+import SupabaseService from '../lib/supabase';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../App';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const supabaseService = new SupabaseService();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +30,7 @@ const RegistrationScreen = () => {
   });
 
 
-  const handleRegister = () => {
+  const handleRegister = async() => {
     setErrors({
       username: '',
       email: '',
@@ -68,7 +77,16 @@ const RegistrationScreen = () => {
       dni: parseInt(dni),
       genero,
     };
-    console.log(user);
+    //COMPROBAR QUE EXISTE EL USUARIO
+    var nUser =  new NewUser(user.username,user.email,user.password);
+    var nPersona = new Persona(null,user.nombre,user.apellido,user.dni,user.genero,null);
+    var result = await supabaseService.newRegister(nUser,nPersona)
+    if(result){
+      const jsonData = JSON.stringify(result);
+      await AsyncStorage.setItem('user', jsonData);
+      Alert.alert('Registro exitoso');
+      navigation.navigate("Home")
+    }
   };
 
   return (
