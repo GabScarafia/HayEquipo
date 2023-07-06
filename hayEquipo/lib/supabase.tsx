@@ -94,6 +94,20 @@ class SupabaseService {
       const [{ id, nombre, apellido, dni, genero }] = data;
       return new Persona(id, nombre, apellido, dni, genero, user);
     }
+
+    async setPersonById(persona: Persona){
+      const { data, error } = await this.supabase
+      .from('Persona')
+      .update([
+        { nombre: persona.nombre, apellido: persona.apellido, dni: persona.dni, genero: persona.genero},
+      ]).eq("id", persona.id)
+      .select()
+      if(data){
+        return true
+      }else{
+        return false
+      }
+    }
   }
   
 export default SupabaseService
