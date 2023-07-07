@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import ImagePicker, { Asset,launchCamera, ImagePickerResponse } from 'react-native-image-picker';
+import { Asset, launchCamera, ImagePickerResponse } from 'react-native-image-picker';
 
 interface AvatarProps{
     photo: string | null;

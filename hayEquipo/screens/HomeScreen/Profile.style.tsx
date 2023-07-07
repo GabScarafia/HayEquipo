@@ -2,11 +2,12 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
     view:{
-        height: "90%",
+        height: "100%",
         width: '80%',
         padding: 8,
-        gap:2,
+        gap:8,
         alignSelf: 'center',
+        justifyContent:"center",
       },
       registerButtonContainer: {
         height:40,

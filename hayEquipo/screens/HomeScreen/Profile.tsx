@@ -124,11 +124,12 @@ return (
             onChangeText={handleGeneroChange}
             error={null}
         />
-         <View style={styles.inputContainer}>
+         {/* <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.registerButton} onPress={handleSave} >
             <Text style={styles.registerButtonText}>GUARDAR</Text>
           </TouchableOpacity >
-        </View>
+        </View> */}
+        <Button  title="GUARDAR" onPress={handleSave}/>
     </View>
 );
 }

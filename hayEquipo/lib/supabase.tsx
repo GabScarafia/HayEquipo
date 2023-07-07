@@ -2,6 +2,8 @@ import 'react-native-url-polyfill/auto'
 import { createClient } from '@supabase/supabase-js';
 import {NewUser, User} from '../classes/user';
 import Persona from '../classes/persona';
+import Equipo from '../classes/equipo';
+import JugadorEquipo from "../classes/jugadorEquipo"
 
 class SupabaseService {
     supabaseUrl: string;
@@ -60,7 +62,34 @@ class SupabaseService {
       }
     }
     
-    
+    async newTeam(equipo: Equipo){
+      try {
+        const { data, error } = await this.supabase
+            .from('Equipo')
+            .insert([
+              { nombre: equipo.nombre , escudo: equipo.escudo, adminId: equipo.adminId},
+            ])
+            .select()
+          if(data){
+              const [{ id, nombre, escudo, adminId }] = data;
+              var uJE = new JugadorEquipo(null, adminId, id);
+              var finish = await this.newJugadorEquipo(uJE);
+              return finish;
+          } 
+      } catch {
+        return false 
+      }
+    }
+    async newJugadorEquipo(jE: JugadorEquipo){
+      console.log(true)
+      const { data, error } = await this.supabase
+      .from('JugadorEquipo')
+      .insert([
+        { jugadorId: jE.jugadorId, equipoId: jE.equipoId},
+      ])
+      .select()
+      return true
+    }
 
     async newRegister(user: NewUser, persona: Persona){
       try {
