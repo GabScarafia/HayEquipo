@@ -51,7 +51,7 @@ class SupabaseService {
   
         if (data) { 
           const { id, username, apellido, dni, genero } = data;
-          return new Persona(id, username, apellido, dni, genero, null);
+          return new Persona(id, username, apellido, dni, genero, null, null);
         }
   
         return null;
@@ -92,14 +92,14 @@ class SupabaseService {
       ])
       .select()
       const [{ id, nombre, apellido, dni, genero }] = data;
-      return new Persona(id, nombre, apellido, dni, genero, user);
+      return new Persona(id, nombre, apellido, dni, genero, user, null);
     }
 
     async setPersonById(persona: Persona){
       const { data, error } = await this.supabase
       .from('Persona')
       .update([
-        { nombre: persona.nombre, apellido: persona.apellido, dni: persona.dni, genero: persona.genero},
+        { nombre: persona.nombre, apellido: persona.apellido, dni: persona.dni, genero: persona.genero, image: persona.image},
       ]).eq("id", persona.id)
       .select()
       if(data){

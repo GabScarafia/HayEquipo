@@ -79,7 +79,7 @@ const RegistrationScreen = () => {
     };
     //COMPROBAR QUE EXISTE EL USUARIO
     var nUser =  new NewUser(user.username,user.email,user.password);
-    var nPersona = new Persona(null,user.nombre,user.apellido,user.dni,user.genero,null);
+    var nPersona = new Persona(null,user.nombre,user.apellido,user.dni,user.genero,null, null);
     var result = await supabaseService.newRegister(nUser,nPersona)
     if(result){
       const jsonData = JSON.stringify(result);

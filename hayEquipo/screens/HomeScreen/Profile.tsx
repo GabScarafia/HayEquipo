@@ -7,13 +7,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../../classes/user';
 import Persona from '../../classes/persona';
 import SupabaseService from '../../lib/supabase';
-
+import Avatar from '../../component/Avatar';
 //CAMBIAR PERFIL Y FOTO 
 const Profile = () => {
     //Definiciones de Campo
     const supabaseService = new SupabaseService();
     
     const [id, setId] = useState('');
+    const [photo, setPhoto] = useState<string | null>(null);
     const [User, setUser] = useState<User | null>(null);
     const [nombre, setNombre] = useState('');
     const [nombreError, setNombreError] = useState<string | null>(null);
@@ -27,6 +28,11 @@ const Profile = () => {
     const [genero, setGenero] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setPhoto(photo);
+      }, [])
+    
     //Errores
     const handleNameChange = (text: string) => {
         setNombre(text);
@@ -46,6 +52,10 @@ const Profile = () => {
     const handleGeneroChange = (text: string) => {
         setGenero(text);
     };
+    const handleImageChange = (text: string | null) => {
+        console.log("estoy en image")
+        setPhoto(text);
+    };
     //GET VARIBLES EXISTENTES
     useEffect(() => {
         if(!isLoading)
@@ -55,25 +65,26 @@ const Profile = () => {
         }
     }, []);
     const GetData = async() => {  /*: (Promise<Boolean>)*/
-        //console.log(loged)
         const value = await AsyncStorage.getItem('user');
         if(value != null)
         {
             const data = JSON.parse(value)
-            const { id, nombre, apellido, dni, genero, User } = data;
+            const { id, nombre, apellido, dni, genero, User, image } = data;
             setNombre(nombre)
             setApellido(apellido)
             setDni(dni.toString())
             setGenero(genero)
             setId(id.toString())
             setUser(User)
+            setPhoto(image)
+            // console.log("porque no cambia la imagen?")
+            // console.log(image)
         }
     }
     //SET VARIBLES
     const handleSave = async() => {
         if(nombreError == null && apellidoError == null && dniError == null){
-            const Person = new Persona(parseInt(id), nombre, apellido, parseInt(dni), genero, User)
-           
+            const Person = new Persona(parseInt(id), nombre, apellido, parseInt(dni), genero, User,photo)
             //LLAMAR A SUPABASE
             const success =await supabaseService.setPersonById(Person)
             if(success){
@@ -88,6 +99,7 @@ const Profile = () => {
 
 return (
     <View style={styles.view} >
+        <Avatar photo={photo} onChange={handleImageChange} />
         <InputComponent
             label="Nombre"
             value={nombre}
