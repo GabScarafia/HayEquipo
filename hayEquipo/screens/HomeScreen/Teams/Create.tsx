@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { Button, View, TextInput, Image } from 'react-native';
-// import { styles } from '../HomeScreen.style';
 import { Text, Title } from 'react-native-paper';
 import { styles } from './Create.style';
 import ImagePicker, { Asset,launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
@@ -9,15 +8,17 @@ import Persona from '../../../classes/persona';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SupabaseService from '../../../lib/supabase';
 import Equipo from '../../../classes/equipo';
+import BackButton from '../../../component/BackButton';
 
 
 interface CreateTeamProps 
 {
     onTeamCreated: (success: boolean) => void;
+    back: (success: number) => void;
 }
 
 //EN EL HANDLE DEL SAVE, tengo que "insert" el equipo como tal con nombre/escudo/idAdmin y a su vez crear el JugadorEquipo con jugadorid(idAdmin) y equipoId(del recien insertado)
-const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated })=> {
+const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated, back })=> {
     const supabaseService = new SupabaseService();
 
     const [logoImage, setLogoImage] = useState<string | null>(null);
@@ -47,6 +48,9 @@ const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated })=> {
         // Perform any validation and set the error message if necessary
         setNombreError(text.trim() === '' ? 'Este Campo no puede estar Vacio' : null);
         };
+    const handleBackButton = () => {
+        back(0)
+    };    
 
     async function handleSave(){
         nombre.trim() === '' ? setNombreError('Este Campo no puede estar Vacio') : setNombreError("");
@@ -62,6 +66,7 @@ const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated })=> {
 return (
     <View style={styles.view}>
         {/*Nombre, Poder subir un Escudo*/}
+        <BackButton onPress={handleBackButton}/>
         <Title style={styles.title}>Crear equipo</Title>
         <InputComponent
             label="Nombre"

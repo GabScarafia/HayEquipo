@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from "./screens/HomeScreen";
 import { IconButton } from 'react-native-paper';
+import { LogBox } from 'react-native';
 
 export type RootStackParams = {
   Register : any;
@@ -16,7 +17,13 @@ export type RootStackParams = {
 };
 const Stack = createNativeStackNavigator();  
 
+
+
 const App = () => {
+  // Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...']);
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
   async function CloseSesion( navigation :any){
     try {
       await AsyncStorage.removeItem('user');

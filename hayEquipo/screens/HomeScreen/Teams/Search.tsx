@@ -1,12 +1,18 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 // import { styles } from '../HomeScreen.style';
-import { Text } from 'react-native-paper';
+import BackButton from '../../../component/BackButton';
 
 const SearchTeam = () => {
+    
+    const handleBackButton = () => {
+    
+    };    
+    
 return (
     <View /*style={styles.view}*/ >
-        B
+        <BackButton onPress={handleBackButton}/>
+        <Text>B</Text>    
     </View>
     //<SearchTeam>
 

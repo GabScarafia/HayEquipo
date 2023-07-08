@@ -4,41 +4,20 @@ export const styles = StyleSheet.create({
   view:{
     height: "100%",
     width: '100%',
-    padding: 8,
+    paddingHorizontal:32,
     gap:8,
-    alignSelf: 'center',
-    justifyContent:"center",
+    paddingVertical:8,
   },
-    container: {
-        marginBottom: 16,
-      },
-      label: {
-        marginBottom: 8,
-        fontSize: 16,
-        fontWeight: 'bold',
-      },
-      input: {
-        borderWidth: 1,
-        borderColor: '#000',
-        borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        fontSize: 16,
-        backgroundColor: "white",
-      },
-      errorText: {
-        color: 'red',
-        fontSize: 14,
-        marginTop: 5,
-      },
-      logo: {
-        width: "100%",
-        height: 250,
-        marginBottom: 24,
-      },
-      title: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-      },
+  logo: {
+    width: "100%",
+    height: 250,
+    // marginBottom: 24,
+    resizeMode:"contain"
+  },
+  title: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
     
 })

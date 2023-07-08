@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Alert, Pressable, Text, TouchableOpacity } from 'react-native';
-import { styles } from './HomeScreen.style';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

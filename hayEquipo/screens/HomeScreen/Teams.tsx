@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
-import { Button, View } from 'react-native';
-import { styles } from '../HomeScreen.style';
+import { Button, View, Alert } from 'react-native';
 import { Text } from 'react-native-paper';
 import SearchTeam from './Teams/Search';
 import CreateTeam from './Teams/Create';
+import OptionsTeam from "./Teams/Options"
 
 const Teams = () => {
     const [mode, setMode] = useState(0);
     
-    const handleChildValue = (value: boolean) => {
+    const handleCreate = () => {
         // Do something with the value received from the child component
-        console.log('Received value from child:', value);
+        Alert.alert('Equipo Creado Correctamente');  
+        setMode(0);
       };
     
+    const handleOption = (value : number) => {
+        setMode(value);
+    }
 return (
-    <View style={styles.view} >
-        <CreateTeam onTeamCreated={handleChildValue} />
-        {/* Search component*/}
-        {/*If search nulo, muestro boton Create component*/}
-        
+
+    <View>
+        {mode === 0 && <OptionsTeam optionChoose={handleOption}/>}
+        {mode === 1 && <CreateTeam onTeamCreated={handleCreate} back={handleOption} />}
+        {mode === 2 && <SearchTeam />}
     </View>
-    //<SearchTeam>
-    //<CreateTeam>
 );
 }
 

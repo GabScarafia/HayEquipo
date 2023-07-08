@@ -14,7 +14,7 @@ const BottomTabs = () => {
                                                                         <MaterialCommunityIcons name="home" color={color} size={26} />
                                                                     ),
                                                                     }} />
-            <Tab.Screen  name = "Equipo" component={ Teams } options={{ unmountOnBlur: true ,
+            <Tab.Screen  name = "Equipo" component={ Teams } options={{ /*unmountOnBlur: true ,*/
                                                               tabBarLabel: 'Equipos',
                                                               tabBarIcon: ({ color }) => (
                                                                 <MaterialCommunityIcons name="account-group" color={color} size={26} />
