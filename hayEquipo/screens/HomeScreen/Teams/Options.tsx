@@ -13,10 +13,7 @@ interface OptionsTeamProps
 {
     optionChoose: (success: number) => void;
 }
-interface data{
-    imageSource:String,
-    name:String,
-}
+
 const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
     const [teams, setTeams] = useState<Equipo[] | null>([]);
     const [isLoad, setLoad] = useState(false);
@@ -27,14 +24,19 @@ const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
             getEquipos()
             setLoad(true)
         }
-      }, [])
+    }, [])
 
     async function getEquipos() {
+        console.log(teams)
+        if (teams && teams.length > 0) {
+            return; // Si ya tienes equipos cargados, no hagas nada
+        }
         var person = await GetPerson()
         if(person){
-           var equipos = await supabaseService.getEquipoByJugadorId(person.id as number)
-           setTeams(equipos);
+            var equipos = await supabaseService.getEquipoByJugadorId(person.id as number)
+            setTeams(equipos);
         }
+        
     } 
     const GetPerson = async() => {  
         const value = await AsyncStorage.getItem('user');
@@ -59,16 +61,11 @@ return (
         <View style={styles.separator} /> 
         <View style={styles.bottomView}>
             <Text>Tus Equipos</Text> 
-            {/* <TeamItem imageSource="" name="Prueba"/> */}
             {teams !== null && teams.map((item, index) => (
-                <TeamItem key={index} imageSource={item.escudo as string} name={item.nombre} />
+                <TeamItem key={index} imageSource={item.escudo as string} name={item.nombre} joinable={false} id={item.id as number}/>
             ))} 
-            {/* <TeamItem /> */}
         </View>
     </View>
-
-    //<SearchTeam>
-
 );
 }
 

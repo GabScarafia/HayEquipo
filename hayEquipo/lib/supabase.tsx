@@ -4,6 +4,7 @@ import {NewUser, User} from '../classes/user';
 import Persona from '../classes/persona';
 import Equipo from '../classes/equipo';
 import JugadorEquipo from "../classes/jugadorEquipo"
+import Partido from '../classes/partido';
 
 class SupabaseService {
     supabaseUrl: string;
@@ -62,6 +63,44 @@ class SupabaseService {
       }
     }
 
+    async getEquiposByNombre(nombre: string){
+      try {
+        const Equipos: Equipo[] = [];
+        const { data, error } = await this.supabase
+          .from('Equipo')
+          .select('*')
+          .ilike('nombre', "%"+nombre+"%")
+        if (error) {
+          throw new Error(error.message);
+        }
+        if (data) { 
+          await Promise.all(
+            data.map(async ({ id, nombre, escudo, adminId }: { id: number; nombre: string; escudo: string, adminId: number }) => {
+              var tempEquipo = new Equipo(id, nombre, escudo, adminId)
+              Equipos.push(tempEquipo); 
+            })
+          );
+          return Equipos
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+    async getEquipoById(id: number){
+      const { data, error } = await this.supabase
+      .from('Equipo')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+      if (data) {
+        const { id, nombre, escudo, adminId } = data;
+        const tempEquipo = new Equipo(id, nombre, escudo, adminId);
+      return tempEquipo
+      }
+    }
+    
     async getEquipoByJugadorId(jugadorId: number) {
       try {
         const Equipos: Equipo[] = [];
@@ -115,8 +154,8 @@ class SupabaseService {
         return false 
       }
     }
+
     async newJugadorEquipo(jE: JugadorEquipo){
-      console.log(true)
       const { data, error } = await this.supabase
       .from('JugadorEquipo')
       .insert([
@@ -172,6 +211,55 @@ class SupabaseService {
         return false
       }
     }
-  }
-  
-export default SupabaseService
+
+    async newPlayerOnTeam(idEquipo: number, idPersona: number){
+      const { data, error } = await this.supabase
+        .from('JugadorEquipo')
+        .select('*')
+        .eq('jugadorId', idPersona).eq('equipoId', idEquipo)
+        if (error) {
+          throw new Error(error.message);
+        }
+        if (data) { 
+          if(data.length > 0){
+            console.log("Ya sos parte de este Equipo")
+            return "Ya sos parte de este Equipo"
+          }else{
+            var uJE = new JugadorEquipo(null, idPersona, idEquipo);
+            var finish = await this.newJugadorEquipo(uJE);
+            if(finish)
+              return "Solicitud Enviada"
+            else
+              return "Error"
+          }
+        }
+    }
+
+    async getGameByEquipoId(equipoId: number) {
+      try {
+        const partidos: Partido[] = [];
+        const { data, error } = await this.supabase
+          .from('Partidos')
+          .select('*')
+          .eq('idEquipoLocal', equipoId)
+        if (error) {
+          throw new Error(error.message);
+        }
+        if (data) { 
+          await Promise.all(
+            data.map(async ({ id, idEquipoLocal, idEquipoVisitante, fecha }: { id: number; idEquipoLocal: number; idEquipoVisitante: number, fecha:Date }) => {
+              const tempEquipo = new Partido(id, idEquipoLocal, idEquipoVisitante,fecha);
+              partidos.push(tempEquipo);
+            })
+          );
+          return partidos;
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+    
+};
+
+export default SupabaseService;

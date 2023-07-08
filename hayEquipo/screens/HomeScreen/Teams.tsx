@@ -15,14 +15,16 @@ const Teams = () => {
       };
     
     const handleOption = (value : number) => {
-        setMode(value);
+        if(mode !== value){
+            setMode(value);
+        }
     }
 return (
 
     <View>
         {mode === 0 && <OptionsTeam optionChoose={handleOption}/>}
         {mode === 1 && <CreateTeam onTeamCreated={handleCreate} back={handleOption} />}
-        {mode === 2 && <SearchTeam />}
+        {mode === 2 && <SearchTeam back={handleOption} />}
     </View>
 );
 }

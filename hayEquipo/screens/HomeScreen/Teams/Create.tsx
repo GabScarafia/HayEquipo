@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, View, TextInput, Image } from 'react-native';
 import { Text, Title } from 'react-native-paper';
 import { styles } from './Create.style';
@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SupabaseService from '../../../lib/supabase';
 import Equipo from '../../../classes/equipo';
 import BackButton from '../../../component/BackButton';
-
+import RNRestart from 'react-native-restart';
 
 interface CreateTeamProps 
 {
@@ -20,12 +20,13 @@ interface CreateTeamProps
 //EN EL HANDLE DEL SAVE, tengo que "insert" el equipo como tal con nombre/escudo/idAdmin y a su vez crear el JugadorEquipo con jugadorid(idAdmin) y equipoId(del recien insertado)
 const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated, back })=> {
     const supabaseService = new SupabaseService();
-
+    const [isLoad, setLoad] = useState(false);
+   
     const [logoImage, setLogoImage] = useState<string | null>(null);
     const [nombre, setNombre] = useState('');
     const [nombreError, setNombreError] = useState<string | null>(null);
     
-    const GetData = async() => {  /*: (Promise<Boolean>)*/
+    const GetData = async() => {
         const value = await AsyncStorage.getItem('user');
         if(value != null)
         {
@@ -48,7 +49,10 @@ const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated, back })=> {
         // Perform any validation and set the error message if necessary
         setNombreError(text.trim() === '' ? 'Este Campo no puede estar Vacio' : null);
         };
+
     const handleBackButton = () => {
+        setLogoImage(null);
+        setNombre("");
         back(0)
     };    
 
@@ -63,9 +67,9 @@ const CreateTeam : React.FC<CreateTeamProps> = ({ onTeamCreated, back })=> {
             }
         }
     }
+
 return (
     <View style={styles.view}>
-        {/*Nombre, Poder subir un Escudo*/}
         <BackButton onPress={handleBackButton}/>
         <Title style={styles.title}>Crear equipo</Title>
         <InputComponent
@@ -75,8 +79,6 @@ return (
             error={nombreError}
         />
         <Button title="Seleccionar logotipo" onPress={handleChooseLogo} />
-
-        {/* {logoImage !== '' && <Image source={{  uri:`data:image/png;base64,${logoImage}`}} style={styles.logo}/> } */}
         {logoImage ? (
             <Image source={{ uri:`data:image/png;base64,${logoImage}` }} style={styles.logo} />
         ) : (
@@ -85,8 +87,6 @@ return (
         <Button title="Crear" onPress={handleSave}></Button>
         
     </View>
-    //<SearchTeam>
-
 );
 }
 
