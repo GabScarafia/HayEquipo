@@ -29,10 +29,14 @@ const SearchTeam : React.FC<CreateTeamProps> = ({ back })=>  {
         if (searching) {
             clearTimeout(timerRef.current as NodeJS.Timeout);
           }
-          timerRef.current = setTimeout(() => {
-            handleSearch(text);
-          }, 500);
-          setSearching(true);
+          if (text !== '') {
+            timerRef.current = setTimeout(() => {
+              handleSearch(text);
+            }, 500);
+            setSearching(true);
+          } else {
+            setSearching(false);
+          }
     };      
     
     const handleSearch = async (text: string) => {
