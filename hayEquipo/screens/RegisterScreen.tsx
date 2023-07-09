@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const RegistrationScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const supabaseService = new SupabaseService();
+  const [mode, setMode] = useState(0);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -77,6 +78,7 @@ const RegistrationScreen = () => {
       dni: parseInt(dni),
       genero,
     };
+
     //COMPROBAR QUE EXISTE EL USUARIO
     var nUser =  new NewUser(user.username,user.email,user.password);
     var nPersona = new Persona(null,user.nombre,user.apellido,user.dni,user.genero,null, null);
@@ -107,7 +109,8 @@ const RegistrationScreen = () => {
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
-            />{errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+            />
+            {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
           </View>
           <View style={styles.inputContainer}>
             <TextInput
@@ -116,7 +119,8 @@ const RegistrationScreen = () => {
               secureTextEntry
               value={password}
               onChangeText={setPassword}
-            />{errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
+            />
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
           </View>
           <View style={styles.inputContainer}>
             <TextInput

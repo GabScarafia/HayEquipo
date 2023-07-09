@@ -70,6 +70,7 @@ const Profile = () => {
         {
             const data = JSON.parse(value)
             const { id, nombre, apellido, dni, genero, User, image } = data;
+            console.log(data);
             setNombre(nombre)
             setApellido(apellido)
             setDni(dni.toString())

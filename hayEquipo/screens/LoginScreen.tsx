@@ -45,8 +45,9 @@ const LoginScreen = () => {
         const personData = await supabaseService.getPersonByUserId(responseData.id);
   
         if (personData && responseData) {
-          const completePersona = new Persona(personData.id, personData.nombre, personData.apellido, personData.dni, personData.genero, responseData, null);
+          const completePersona = new Persona(personData.id, personData.nombre, personData.apellido, personData.dni, personData.genero, responseData, personData.image);
           const jsonData = JSON.stringify(completePersona);
+          console.log(personData.nombre)
           await AsyncStorage.setItem('user', jsonData);
           Alert.alert('Inicio de sesión exitoso');
           navigation.navigate("Home");

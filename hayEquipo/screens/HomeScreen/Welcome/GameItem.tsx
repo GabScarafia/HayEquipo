@@ -4,7 +4,7 @@ import { Alert, Button, Image, StyleSheet, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Persona from '../../../classes/persona';
 import SupabaseService from '../../../lib/supabase';
-
+import dayjs from "dayjs";
 import Equipo from '../../../classes/equipo';
 
 interface Item{
@@ -18,8 +18,10 @@ const GameItem : React.FC<Item> = ({ idLocal, idVisitante,fecha}) => {
   const [local, setLocal] = useState<Equipo | null>(null);
   const [visitante, setVisitante] = useState<Equipo | null>(null);
   const [isLoad, setLoad] = useState(false)
-  const formattedDate = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  // const formattedDate = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
+  const formattedDate = dayjs(fecha).format("MM/DD/YYYY HH:mm"); // 03/19/2022
+  
 
   useEffect(() => {
     if(!isLoad){
@@ -46,7 +48,7 @@ const GameItem : React.FC<Item> = ({ idLocal, idVisitante,fecha}) => {
         )} 
         <View style={styles.content}>
           <Text style={styles.name}>{local?.nombre} - {visitante?.nombre}</Text>
-           <Text style={styles.name}>{formattedDate}</Text> 
+          <Text style={styles.date}>{formattedDate}</Text> 
         </View>
         {visitante?.escudo ? (
             <Image source={{ uri:`data:image/png;base64,${visitante.escudo}` }} style={styles.image} />
@@ -85,6 +87,10 @@ const styles = StyleSheet.create({
       fontSize: 12,
       fontWeight: 'bold',
     },
+    date:{
+      textAlign:"center",
+      fontSize:11,
+    }
   });
   
   export default GameItem;

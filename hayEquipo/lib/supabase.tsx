@@ -53,8 +53,8 @@ class SupabaseService {
         }
   
         if (data) { 
-          const { id, username, apellido, dni, genero } = data;
-          return new Persona(id, username, apellido, dni, genero, null, null);
+          const { id, nombre, apellido, dni, genero, userId, image } = data;
+          return new Persona(id, nombre, apellido, dni, genero, null, image);
         }
   
         return null;
@@ -108,6 +108,7 @@ class SupabaseService {
           .from('JugadorEquipo')
           .select('*')
           .eq('jugadorId', jugadorId)
+          
         if (error) {
           throw new Error(error.message);
         }
@@ -241,7 +242,8 @@ class SupabaseService {
         const { data, error } = await this.supabase
           .from('Partidos')
           .select('*')
-          .eq('idEquipoLocal', equipoId)
+          //.eq('idEquipoLocal', equipoId)
+          .or("idEquipoLocal.eq."+equipoId+",idEquipoVisitante.eq."+equipoId)
         if (error) {
           throw new Error(error.message);
         }
