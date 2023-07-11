@@ -8,7 +8,7 @@ const BottomTabs = () => {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator  screenOptions={{ headerShown: false }}>
-            <Tab.Screen name = "Bienvenido" component={ Welcome }   options={{
+            <Tab.Screen name = "Bienvenido" component={ Welcome }   options={{ unmountOnBlur: true ,
                                                                     tabBarLabel: 'Inicio',
                                                                     tabBarIcon: ({ color }) => (
                                                                         <MaterialCommunityIcons name="home" color={color} size={26} />

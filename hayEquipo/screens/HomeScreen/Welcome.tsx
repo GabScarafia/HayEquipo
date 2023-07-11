@@ -21,7 +21,7 @@ const Welcome = () => {
     const [selectedPartido, setSelectedPartido] = useState<Partido | null>(null); // Estado para almacenar el ID del equipo seleccionado
     const [equipoLocal, setEquipoLocal] = useState<Equipo| null>(null);
     const [equipoVisitante, setEquipoVisitante] = useState<Equipo| null>(null);
-    var formattedDate = dayjs(selectedPartido?.fecha).format("MM/DD/YYYY HH:mm"); // 03/19/2022
+    var formattedDate = dayjs(selectedPartido?.fecha).format("DD/MM/YYYY HH:mm"); // 03/19/2022
     const [jugadoresLocal, setJugadoresLocal] = useState<Persona[] | null>([]);
     const [jugadoresVisitante, setJugadoresVisitante] = useState<Persona[] | null>([]);
     useEffect(() => {
@@ -66,21 +66,30 @@ const Welcome = () => {
     async function handleGameItemPress(p: Partido) {
         setSelectedPartido(p); // Guarda el ID del equipo seleccionado en el estado
         await getEquipos(p);
-        formattedDate = dayjs(selectedPartido?.fecha).format("MM/DD/YYYY HH:mm"); 
+        formattedDate = dayjs(selectedPartido?.fecha).format("DD/MM/YYYY HH:mm"); 
     }
     function handlePopUpClose() {
-        setSelectedPartido(null); // Resetea el ID del equipo seleccionado para cerrar el pop-up
+        setSelectedPartido(null); 
+        setEquipoLocal(null);
+        setEquipoVisitante(null);
+        setJugadoresLocal(null);
+        setEquipoVisitante(null);
     }
 
     async function getEquipos(p:Partido){
         const local = await supabaseService.getEquipoById(p.idEquipoLocal);
-        const visitante = await supabaseService.getEquipoById(p.idEquipoVisitante);
+        if(p.idEquipoVisitante){
+            const visitante = await supabaseService.getEquipoById(p.idEquipoVisitante);
+            setEquipoVisitante(visitante as Equipo);
+        }
         setEquipoLocal(local as Equipo);
-        setEquipoVisitante(visitante as Equipo);
+        
         const playerL = await supabaseService.getJugadores(p.idEquipoLocal);
         setJugadoresLocal(playerL);
-        const playerV = await supabaseService.getJugadores(p.idEquipoVisitante);
-        setJugadoresVisitante(playerV);
+        if(p.idEquipoVisitante){
+            const playerV = await supabaseService.getJugadores(p.idEquipoVisitante);
+            setJugadoresVisitante(playerV);
+        }
     }
 
 return (
@@ -110,17 +119,22 @@ return (
                             ) : (
                                 <Image source={require('../../assets/default-logo.png')} style={styles.image} />
                             )} 
-                            {equipoVisitante?.escudo ? (
-                                <Image source={{ uri:`data:image/png;base64,${equipoVisitante?.escudo}` }} style={styles.image} />
-                            ) : (
-                                <Image source={require('../../assets/default-logo.png')} style={styles.image} />
-                            )} 
+                            {equipoVisitante && (
+                                equipoVisitante.escudo ? (
+                                    <Image source={{ uri:`data:image/png;base64,${equipoVisitante?.escudo}` }} style={styles.image} />
+                                ) : (
+                                    <Image source={require('../../assets/default-logo.png')} style={styles.image} />
+                                )
+                            ) }
+                           
                         </View>
-                        <Text style={styles.modalTextName} >{equipoLocal?.nombre} vs {equipoVisitante?.nombre}</Text>
+                        <Text style={styles.modalTextName} >{equipoLocal?.nombre} {equipoVisitante ? ("-") : ("")} {equipoVisitante?.nombre}</Text>
                     </View>
                     <View style={styles.separator} /> 
                     <View style={styles.modalMid} >
                         <Text> <Text style={styles.boldText}>Fecha: </Text> {formattedDate}hrs</Text>
+                        
+                        <Text> <Text style={styles.boldText}>Genero: </Text> Mixto</Text>
                     </View>
                     <View style={styles.separator} /> 
                     <View style={styles.modalMid}>
@@ -137,17 +151,17 @@ return (
                                 </View>
                                 ))}
                             </View>
-                            <View style={styles.modalPlayerChild}>
-                                <Text>Visitante: </Text>
-                                    {jugadoresVisitante !== null && jugadoresVisitante.map((item, index) => (
-                                    <View key={index}>
-                                        <PlayerItem
-                                            imageSource={item.image as string}
-                                            name={item.nombre +" "+item.apellido+" "}
-                                            />
-                                    </View>
-                                    ))}
-                            </View>
+                            {equipoVisitante && (    
+                                <View style={styles.modalPlayerChild}>
+                                    <Text>Visitante: </Text>
+                                        {jugadoresVisitante !== null && jugadoresVisitante.map((item, index) => (
+                                        <View key={index}>
+                                            <PlayerItem imageSource={item.image as string} name={item.nombre +" "+item.apellido} />
+                                        </View>
+                                        ))}
+                                </View>)
+                            }
+                        
                         </View>
                     </View>
                     {/* <View style={styles.separator} />  */}

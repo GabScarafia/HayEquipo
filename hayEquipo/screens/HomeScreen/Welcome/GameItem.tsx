@@ -9,7 +9,7 @@ import Equipo from '../../../classes/equipo';
 
 interface Item{
     idLocal: number,
-    idVisitante: number,
+    idVisitante: number | null,
     fecha: Date,
 }
 
@@ -20,7 +20,7 @@ const GameItem : React.FC<Item> = ({ idLocal, idVisitante,fecha}) => {
   const [isLoad, setLoad] = useState(false)
   // const formattedDate = fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
-  const formattedDate = dayjs(fecha).format("MM/DD/YYYY HH:mm"); // 03/19/2022
+  const formattedDate = dayjs(fecha).format("DD/MM/YYYY HH:mm"); // 03/19/2022
   
 
   useEffect(() => {
@@ -34,9 +34,10 @@ const GameItem : React.FC<Item> = ({ idLocal, idVisitante,fecha}) => {
         var l = await supabaseService.getEquipoById(idLocal)
         if(l)
             setLocal(l)
+        if(idVisitante){
         var v = await supabaseService.getEquipoById(idVisitante)
         if(v)
-            setVisitante(v)
+            setVisitante(v)}
     } 
     
   return (
@@ -47,14 +48,14 @@ const GameItem : React.FC<Item> = ({ idLocal, idVisitante,fecha}) => {
             <Image source={require('../../../assets/default-logo.png')} style={styles.image} />
         )} 
         <View style={styles.content}>
-          <Text style={styles.name}>{local?.nombre} - {visitante?.nombre}</Text>
+          <Text style={styles.name}>{local?.nombre} {visitante ? "-" : ""} {visitante?.nombre}</Text>
           <Text style={styles.date}>{formattedDate}</Text> 
         </View>
-        {visitante?.escudo ? (
+        {visitante ? (visitante?.escudo ? (
             <Image source={{ uri:`data:image/png;base64,${visitante.escudo}` }} style={styles.image} />
         ) : (
             <Image source={require('../../../assets/default-logo.png')} style={styles.image}/>
-        )} 
+        )):(<></>)} 
       </View>
     );
   };
@@ -82,13 +83,13 @@ const styles = StyleSheet.create({
     content: {
       flex: 1,
       justifyContent: 'center',
+      textAlign: 'center',
     },
     name: {
       fontSize: 12,
       fontWeight: 'bold',
     },
     date:{
-      textAlign:"center",
       fontSize:11,
     }
   });

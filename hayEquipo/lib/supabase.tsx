@@ -191,6 +191,23 @@ class SupabaseService {
         return false 
       }
     }
+    async newGame(equipoId: number, fecha: Date){
+      try {
+        const { data, error } = await this.supabase
+            .from('Partidos')
+            .insert([
+              { fecha: fecha , idEquipoLocal: equipoId},
+            ])
+            .select()
+          if(data){
+              const [{ id, fecha, idEquipoLocal, idEquipoVisitante }] = data;
+              var uJE = new Partido(id, fecha, idEquipoLocal, idEquipoVisitante);
+              return uJE ;
+          } 
+      } catch {
+        return false 
+      }
+    }
 
     async newJugadorEquipo(jE: JugadorEquipo){
       const { data, error } = await this.supabase

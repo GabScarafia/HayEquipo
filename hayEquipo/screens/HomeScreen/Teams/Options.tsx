@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Modal, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, Modal, TouchableOpacity, View } from 'react-native';
 import { styles } from './Options.style';
 import { Text } from 'react-native-paper';
 import TeamItem from './TeamItem';
 import Equipo from '../../../classes/equipo';
 import SupabaseService from '../../../lib/supabase';
 import Persona from '../../../classes/persona';
-
+import DatePicker from 'react-native-date-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PlayerItem from './PlayerItem';
 
@@ -21,7 +21,8 @@ const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
     const supabaseService = new SupabaseService();
     const [selectedTeam, setSelectedTeam] = useState<Equipo | null>(null); // Estado para almacenar el ID del equipo seleccionado
     const [jugadores, setJugadores] = useState<Persona[] | null>([]);
-
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
     useEffect(() => {
         if(!isLoad){
             getEquipos()
@@ -64,9 +65,20 @@ const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
         await getPlayer(e.id as number)
     }
     
-      function handlePopUpClose() {
+    function handlePopUpClose() {
         setSelectedTeam(null); // Resetea el ID del equipo seleccionado para cerrar el pop-up
-      }
+    }
+
+    function handleGame(){
+        setOpen(true); // Muestra el modal cuando se presiona el botón "Agregar Partido"
+    }
+
+
+    async function handleConfirm(date: Date) {
+        await supabaseService.newGame(selectedTeam?.id as number, date)
+        Alert.alert("Partido Creado")
+    }
+
 return (
     <View style={styles.view}>
         <View style={styles.startView}>
@@ -117,12 +129,50 @@ return (
                         ))}
                     </View>
                     <View style={styles.separator} /> 
+                    <View style={styles.modalMid}>
+                        <Button title='Agregar Partido' onPress={handleGame}  />
+                        <DatePicker
+                            modal
+                            open={open}
+                            date={date}
+                            onConfirm={(date) => {
+                                setOpen(false)
+                                setDate(date)
+                                handleConfirm(date)
+                            }}
+                            onCancel={() => {
+                                setOpen(false)
+                            }}
+                        />
+                    </View>
                     <TouchableOpacity style={styles.closeButton} onPress={handlePopUpClose}>
                         <Text style={styles.closeButtonText}>CERRAR</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </Modal>
+
+        {/* <Modal visible={isModalVisible} transparent={true} animationType="fade">
+                <View>
+                    <View style={styles.modalDateContent}>
+                    <DatePicker
+                        modal
+                        open={open}
+                        date={date}
+                        onConfirm={(date) => {
+                            setOpen(false)
+                            setDate(date)
+                            handleConfirm()
+                        }}
+                        onCancel={() => {
+                            setOpen(false)
+                        }}
+                    />
+                    <Button title="Confirmar" onPress={()=>setOpen(true)} />
+                    <Button title="Cancelar" onPress={handleCancel} />
+                    </View>
+                </View>
+            </Modal> */}
     </View>
 );
 }

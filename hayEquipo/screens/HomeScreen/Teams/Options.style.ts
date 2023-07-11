@@ -96,4 +96,10 @@ export const styles = StyleSheet.create({
     boldText: {
         fontWeight:"bold"
     },
+    modalDateContent: {
+        height:"100%",
+        width:"100%",
+        backgroundColor: 'white',
+        padding: 20, gap:5,
+      },
 })
