@@ -101,6 +101,42 @@ class SupabaseService {
       }
     }
     
+    async getJugadores(equipoId: number){
+      try {
+        const Jugadores: Persona[] = [];
+        const { data, error } = await this.supabase
+          .from('JugadorEquipo')
+          .select('*')
+          .eq('equipoId', equipoId)
+          
+        if (error) {
+          throw new Error(error.message);
+        }
+        if (data) { 
+          await Promise.all(
+            data.map(async ({ id, jugadorId, equipoId }: { id: number; jugadorId: number; equipoId: number }) => {
+              const { data, error } = await this.supabase
+                .from('Persona')
+                .select('*')
+                .eq('id', jugadorId)
+                .single();
+        
+              if (data) {
+                const { id, nombre, apellido, dni, genero, userId, image } = data;
+                const tempEquipo = new Persona(id, nombre, apellido, dni, genero, null, image);
+                Jugadores.push(tempEquipo);
+              }
+            })
+          );
+          return Jugadores;
+          // return new Persona(id, username, apellido, dni, genero, null, null);
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+    
     async getEquipoByJugadorId(jugadorId: number) {
       try {
         const Equipos: Equipo[] = [];

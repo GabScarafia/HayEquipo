@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
+import { Button, Image, Modal, TouchableOpacity, View } from 'react-native';
 import { styles } from './Options.style';
 import { Text } from 'react-native-paper';
 import TeamItem from './TeamItem';
@@ -8,6 +8,7 @@ import SupabaseService from '../../../lib/supabase';
 import Persona from '../../../classes/persona';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PlayerItem from './PlayerItem';
 
 interface OptionsTeamProps 
 {
@@ -18,7 +19,9 @@ const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
     const [teams, setTeams] = useState<Equipo[] | null>([]);
     const [isLoad, setLoad] = useState(false);
     const supabaseService = new SupabaseService();
-    
+    const [selectedTeam, setSelectedTeam] = useState<Equipo | null>(null); // Estado para almacenar el ID del equipo seleccionado
+    const [jugadores, setJugadores] = useState<Persona[] | null>([]);
+
     useEffect(() => {
         if(!isLoad){
             getEquipos()
@@ -48,10 +51,22 @@ const OptionsTeam : React.FC<OptionsTeamProps> = ({ optionChoose })=> {
         }
     }
     
+    async function getPlayer(id:number){
+        const player = await supabaseService.getJugadores(id);
+        setJugadores(player);
+    }
+    
     function handleOption(value: number){
         optionChoose(value); 
     }
-
+    async function handleTeamItemPress(e: Equipo) {
+        setSelectedTeam(e); // Guarda el ID del equipo seleccionado en el estado
+        await getPlayer(e.id as number)
+    }
+    
+      function handlePopUpClose() {
+        setSelectedTeam(null); // Resetea el ID del equipo seleccionado para cerrar el pop-up
+      }
 return (
     <View style={styles.view}>
         <View style={styles.startView}>
@@ -62,9 +77,52 @@ return (
         <View style={styles.bottomView}>
             <Text>Tus Equipos</Text> 
             {teams !== null && teams.map((item, index) => (
-                <TeamItem key={index} imageSource={item.escudo as string} name={item.nombre} joinable={false} id={item.id as number}/>
-            ))} 
+            <TouchableOpacity key={index} onPress={() => handleTeamItemPress(item as Equipo)}>
+                <TeamItem
+                imageSource={item.escudo as string}
+                name={item.nombre}
+                joinable={false}
+                id={item.id as number}
+                />
+            </TouchableOpacity>
+            ))}
         </View>
+         {/* Modal / Pop-up */}
+        <Modal visible={selectedTeam !== null} transparent={true} animationType="fade">
+            <View>
+                <View style={styles.modalContent}>
+                    <View style={styles.modalTeam}>
+                        {selectedTeam?.escudo ? (
+                            <Image source={{ uri:`data:image/png;base64,${selectedTeam?.escudo}` }} style={styles.image} />
+                        ) : (
+                            <Image source={require('../../../assets/default-logo.png')} style={styles.image} />
+                        )} 
+                        <Text style={styles.modalTextName} >{selectedTeam?.nombre}</Text>
+                    </View>
+                    <View style={styles.separator} /> 
+                    <View style={styles.modalMid} >
+                        <Text> <Text style={styles.boldText}>Puntaje: </Text> 0/10</Text>
+                        <Text> <Text style={styles.boldText}>Genero:  </Text> Mixto</Text>
+                    </View>
+                    <View style={styles.separator} /> 
+                    <View style={styles.modalMid}>
+                        <Text>Jugadores: </Text>
+                        {jugadores !== null && jugadores.map((item, index) => (
+                        <View key={index}>
+                             <PlayerItem
+                                imageSource={item.image as string}
+                                name={item.nombre +" "+item.apellido+" "}
+                                />
+                        </View>
+                        ))}
+                    </View>
+                    <View style={styles.separator} /> 
+                    <TouchableOpacity style={styles.closeButton} onPress={handlePopUpClose}>
+                        <Text style={styles.closeButtonText}>CERRAR</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>
     </View>
 );
 }

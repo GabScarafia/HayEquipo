@@ -9,23 +9,10 @@ import SupabaseService from '../../../lib/supabase';
 interface Item{
     imageSource:String,
     name:String,
-    joinable: boolean,
-    id:number
-    
 }
 
-const TeamItem : React.FC<Item> = ({ imageSource, name, joinable, id }) => {
-  const supabaseService = new SupabaseService();
+const PlayerItem : React.FC<Item> = ({ imageSource, name }) => {
   
-  async function handleClick(){
-    var persona = await GetPerson();
-    var message = await supabaseService.newPlayerOnTeam(id, persona?.id as number)
-    Alert.alert(message as string);
-    joinable = false
-    //LA FUNCION DE SUPABASE Tengo que pasar el idEquipo y idPersona, buscar el JugadorEquipo 
-    //si existe (retornar si existe o insertar si no) 
-  }
-
   const GetPerson = async() => {  
     const value = await AsyncStorage.getItem('user');
     if(value != null)
@@ -45,7 +32,6 @@ const TeamItem : React.FC<Item> = ({ imageSource, name, joinable, id }) => {
         <View style={styles.content}>
           <Text style={styles.name}>{name}</Text>
         </View>
-        {joinable && <IconButton icon="plus" onPress={handleClick} /> } 
       </View>
     );
   };
@@ -54,30 +40,25 @@ const styles = StyleSheet.create({
     card: {
       flexDirection: 'row',
       backgroundColor: '#fff',
-      borderRadius: 8,
-      padding: 16,
+      padding: 8,
       marginBottom: 12,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
+      elevation: 1,
       zIndex:2,
     },
     image: {
-      width: 50,
-      height: 50,
+      width: 25,
+      height: 25,
       borderRadius: 40,
-      marginRight: 16,
+      marginRight: 12,
     },
     content: {
       flex: 1,
       justifyContent: 'center',
     },
     name: {
-      fontSize: 16,
+      fontSize: 12,
       fontWeight: 'bold',
     },
   });
   
-  export default TeamItem;
+  export default PlayerItem;

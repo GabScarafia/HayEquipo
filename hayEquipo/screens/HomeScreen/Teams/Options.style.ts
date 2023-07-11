@@ -55,6 +55,45 @@ export const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         fontWeight: 'bold',
+    },  
+    modalContent: {
+        height:"100%",
+        width:"100%",
+        backgroundColor: 'white',
+        padding: 20,
+      },
+    modalTeam:{
+        width:"100%",
+        alignItems:'center', justifyContent:"center",
+        paddingBottom:12,
+        gap:4,
     },
-    
+    modalMid:{
+        width:"100%",
+        paddingVertical:12,
+        gap:4,
+    },
+    closeButton: {
+        backgroundColor: 'rgba(245, 39, 39, 1)',
+        alignItems:'center', justifyContent:"center",
+        height:36,
+        borderRadius: 1,
+        marginTop: 'auto',
+    },
+    closeButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    modalTextName:{
+        fontSize:18,
+
+    },
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 64,
+    },
+    boldText: {
+        fontWeight:"bold"
+    },
 })

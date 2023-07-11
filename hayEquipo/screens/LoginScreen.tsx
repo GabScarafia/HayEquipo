@@ -18,6 +18,8 @@ const LoginScreen = () => {
 
    useEffect(() => {
      ifLoged();
+     if(loged)
+      navigation.navigate("Home");
     }, []);
 
 
@@ -39,9 +41,9 @@ const LoginScreen = () => {
   async function handleLogin(){
     setError('');
     if (username && password) {
-      const responseData = await supabaseService.getUserByUsername(username);
+      const responseData = await supabaseService.getUserByUsername(username.trim());
   
-      if (responseData && username === responseData.username && password === responseData.password) {
+      if (responseData && username.trim() === responseData.username && password === responseData.password) {
         const personData = await supabaseService.getPersonByUserId(responseData.id);
   
         if (personData && responseData) {

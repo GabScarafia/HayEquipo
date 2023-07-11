@@ -58,7 +58,7 @@ return (
         />
         {/* <Button title="Buscar" onPress={handleSearch} />  */}
         {data !== null && (query !== '' ? (data.length > 0 ? (data.map((item, index) => (
-            <TeamItem key={index} imageSource={item.escudo as string} name={item.nombre} joinable={true} id={item.id as number} />
+            <TeamItem key={index} imageSource={item.escudo as string} name={item.nombre} joinable={true} id={item.id as number}  />
             ))
             ) : (
               <Text>No se encontraron resultados</Text>

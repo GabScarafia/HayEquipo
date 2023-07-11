@@ -16,6 +16,7 @@ const RegistrationScreen = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
@@ -25,45 +26,71 @@ const RegistrationScreen = () => {
     username: '',
     email: '',
     password: '',
+    repeatPassword: "",
     nombre: '',
     apellido: '',
     dni: '',
   });
+  const [step, setStep] = useState(1);
 
+  const handleNextStep = () => {
+    var cError = false
+    if (!username || username === "") {
+      cError = true
+      setErrors((prevErrors) => ({ ...prevErrors, username: 'Este Campo no puede estar vacio' }));
+    }
+    if (!email || email === "") {
+      cError = true
+      setErrors((prevErrors) => ({ ...prevErrors, email: 'Este Campo no puede estar vacio' }));
+    }
+    if (!password || password === "") {
+      cError = true
+      setErrors((prevErrors) => ({ ...prevErrors, password: 'Este Campo no puede estar vacio' }));
+    }
+    if (!repeatPassword || repeatPassword === "" || repeatPassword !== password) {
+      cError = true
+      setErrors((prevErrors) => ({ ...prevErrors, repeatPassword: 'Este Campo no puede estar vacio o ser distinta contraseña' }));
+    }
+    if ( cError === true) {
+      return;
+    }
+    setStep(step + 1);
+  };
 
   const handleRegister = async() => {
     setErrors({
       username: '',
       email: '',
       password: '',
+      repeatPassword:"",
       nombre: '',
       apellido: '',
       dni: '',
     });
     var cError = false
-    if (!username || username === "") {
-      cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, username: 'Este Campo no puede estar Vacio' }));
-    }
-    if (!email || email === "") {
-      cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, email: 'Este Campo no puede estar Vacio' }));
-    }
-    if (!password || password === "") {
-      cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, password: 'Este Campo no puede estar Vacio' }));
-    }
+    // if (!username || username === "") {
+    //   cError = true
+    //   setErrors((prevErrors) => ({ ...prevErrors, username: 'Este Campo no puede estar Vacio' }));
+    // }
+    // if (!email || email === "") {
+    //   cError = true
+    //   setErrors((prevErrors) => ({ ...prevErrors, email: 'Este Campo no puede estar Vacio' }));
+    // }
+    // if (!password || password === "") {
+    //   cError = true
+    //   setErrors((prevErrors) => ({ ...prevErrors, password: 'Este Campo no puede estar Vacio' }));
+    // }
     if (!nombre || apellido === "") {
       cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, nombre: 'Este Campo no puede estar Vacio' }));
+      setErrors((prevErrors) => ({ ...prevErrors, nombre: 'Este Campo no puede estar vacio' }));
     }
     if (!apellido || apellido === "") {
       cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, apellido: 'Este Campo no puede estar Vacio' }));
+      setErrors((prevErrors) => ({ ...prevErrors, apellido: 'Este Campo no puede estar vacio' }));
     }
     if (!dni || dni === "") {
       cError = true
-      setErrors((prevErrors) => ({ ...prevErrors, dni: 'Este Campo no puede estar Vacio' }));
+      setErrors((prevErrors) => ({ ...prevErrors, dni: 'Este Campo no puede estar vacio' }));
     }
     if ( cError === true) {
        return;
@@ -73,6 +100,7 @@ const RegistrationScreen = () => {
       username,
       email,
       password,
+      repeatPassword,
       nombre,
       apellido,
       dni: parseInt(dni),
@@ -80,8 +108,8 @@ const RegistrationScreen = () => {
     };
 
     //COMPROBAR QUE EXISTE EL USUARIO
-    var nUser =  new NewUser(user.username,user.email,user.password);
-    var nPersona = new Persona(null,user.nombre,user.apellido,user.dni,user.genero,null, null);
+    var nUser =  new NewUser(user.username.trim(),user.email.trim(),user.password.trim());
+    var nPersona = new Persona(null,user.nombre.trim(),user.apellido.trim(),user.dni,user.genero.trim(),null, null);
     var result = await supabaseService.newRegister(nUser,nPersona)
     if(result){
       const jsonData = JSON.stringify(result);
@@ -92,7 +120,8 @@ const RegistrationScreen = () => {
   };
 
   return (
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.container}>
+    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.container}>
+      {step === 1 && (
         <View>
           <View style={styles.inputContainer}>
             <TextInput 
@@ -125,6 +154,22 @@ const RegistrationScreen = () => {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
+              placeholder="Repetir Password"
+              secureTextEntry
+              value={repeatPassword}
+              onChangeText={setRepeatPassword}
+            />
+            {errors.repeatPassword ? <Text style={styles.errorText}>{errors.repeatPassword}</Text> : null}
+          </View>
+          <Button title="Siguiente" onPress={handleNextStep} />
+        </View>
+      )}
+
+      {step === 2 && (
+        <View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
               placeholder="Nombre"
               value={nombre}
               onChangeText={setNombre}
@@ -151,17 +196,17 @@ const RegistrationScreen = () => {
             {errors.dni ? <Text style={styles.errorText}>{errors.dni}</Text> : null}
           </View>
           <View style={styles.inputContainer}>
-            <TextInput style={styles.input}
-              placeholder="Genero"
+            <TextInput
+              style={styles.input}
+              placeholder="Género"
               value={genero}
               onChangeText={setGenero}
             />
           </View>
-          <Button title={isLoading ? 'Creando Cuenta...' : 'Crear Cuenta'}
-                  onPress={handleRegister}
-                  disabled={isLoading} />
+          <Button title={isLoading ? 'Creando Cuenta...' : 'Crear Cuenta'} onPress={handleRegister} disabled={isLoading} />
         </View>
-      </ScrollView>
+      )}
+    </ScrollView>
   );
 };
 
